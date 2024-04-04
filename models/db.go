@@ -1,4 +1,4 @@
-package models
+package models_practice
 
 import(
 	"os"
@@ -12,7 +12,7 @@ import(
 
 var DB *gorm.DB
 
-func initialDB(){
+func InitialDB(){
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatalf("Error while reading config file %s", err)

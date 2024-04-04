@@ -1,4 +1,4 @@
-package models
+package models_practice
 
 import (
 	"net/http"
@@ -13,7 +13,7 @@ type food_list struct {
 }
 
 // Food adds an album from JSON received in the request body.
-func postFood(c *gin.Context) {
+func PostFood(c *gin.Context) {
 	var newFood food_list
 
 	// Call BindJSON to bind the received JSON to
@@ -35,7 +35,7 @@ func postFood(c *gin.Context) {
 
 // getFoodByID locates the album whose ID value matches the id
 // parameter sent by the client, then returns that album as a response.
-func getFoodByID(c *gin.Context) {
+func GetFoodByID(c *gin.Context) {
 	id := c.Param("id")
 	var food food_list
 
@@ -50,7 +50,7 @@ func getFoodByID(c *gin.Context) {
 }
 
 // getFood responds with the list of all albums as JSON.
-func getFood(c *gin.Context) {
+func GetFood(c *gin.Context) {
 	// get Food
 	var food []food_list
 
@@ -64,7 +64,7 @@ func getFood(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, food)
 }
 
-func getFoodinMarket(c *gin.Context) {
+func GetFoodinMarket(c *gin.Context) {
 	id := c.Param("id")
 	var food []food_list
 

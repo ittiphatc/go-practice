@@ -1,19 +1,20 @@
 package main
 
 import (
+	models_practice "go-project/models"
+
 	"github.com/gin-gonic/gin"
-	models "go-project/models"
 )
 
 func main() {
 
-	models.initialDB()
-	
+	models_practice.InitialDB()
+
 	router := gin.Default()
-	router.GET("/food", models.getFood())
-	router.POST("/food", models.postFood())
-	router.GET("/food/:id", models.getFoodByID())
-	router.GET("/market/:id", models.getFoodinMarket())
+	router.GET("/food", models_practice.GetFood)
+	router.POST("/food", models_practice.PostFood)
+	router.GET("/food/:id", models_practice.GetFoodByID)
+	router.GET("/market/:id", models_practice.GetFoodinMarket)
 
 	router.Run("localhost:8080")
 
