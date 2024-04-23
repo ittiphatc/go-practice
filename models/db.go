@@ -40,4 +40,5 @@ func InitialDB(){
 	DB = database
 
 	DB.AutoMigrate(&food_list{})
+	DB.AutoMigrate((&User{}))
 }
