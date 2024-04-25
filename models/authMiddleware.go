@@ -11,7 +11,7 @@ func AuthMiddleware() gin.HandlerFunc {
 		tokenString := c.Request.Header.Get("Authorization")
 		if tokenString == "" {
 			c.JSON(401, gin.H{
-				"message": "Unauthorized",
+				"message": "Unauthorized via middleware",
 			})
 			c.Abort()
 			return
@@ -34,14 +34,36 @@ func AuthMiddleware() gin.HandlerFunc {
 
 		if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 			c.Set("username", claims["username"])
+			c.Set("ID", claims["ID"])
 			c.Set("roles", claims["roles"])
 			c.Next()
 		} else {
 			c.JSON(401, gin.H{
-				"message": "Unauthorized",
+				"message": "Unauthorized login",
 			})
 			c.Abort()
 			return
+		}
+		if token.Claims.(jwt.MapClaims)["roles"] == CUSTOMER {
+			if c.Request.URL.Path == "/market/:MarketID" {
+				c.JSON(403, gin.H{
+					"message": "Forbidden",
+				})
+				c.Abort()
+				return
+			}
+			c.Next()
+		}
+		if token.Claims.(jwt.MapClaims)["roles"] == RESTAURANT {
+			id := c.Param("MarketID")
+			if id != token.Claims.(jwt.MapClaims)["ID"] {
+				c.JSON(403, gin.H{
+					"message": "Forbidden",
+				})
+				c.Abort()
+				return
+			}
+			c.Next()
 		}
 	}
 }

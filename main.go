@@ -21,16 +21,15 @@ func main() {
 	router.POST("/login", models_practice.UserLogin)
 	router.POST("/register", models_practice.UserRegister)
 	router.GET("/food", models_practice.GetFood)
-	router.PUT("/food/:id", models_practice.PutFoodData)
-	router.DELETE("/food/:id", models_practice.DeleteFoodData)
-	router.PATCH("/food/:id", models_practice.PatchFoodPrice)
-	router.PATCH("/food/:id/:newMarketID", models_practice.PatchMarket)
 
 	router.Use(models_practice.AuthMiddleware())
 	{
-		router.POST("/food", models_practice.PostFood)
+		router.POST("/market/:MarkerID", models_practice.PostFood)
 		router.GET("/food/:id", models_practice.GetFoodByID)
 		router.GET("/market/:id", models_practice.GetFoodinMarket)
+		router.PUT("/market/:MarketID/:id", models_practice.PutFoodData)
+		router.DELETE("/market/:MarketID/:id", models_practice.DeleteFoodData)
+		router.PATCH("/market/:MarketID/:id", models_practice.PatchFoodPrice)
 	}
 
 	router.Run(":8080")
