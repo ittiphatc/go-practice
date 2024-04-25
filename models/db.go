@@ -18,14 +18,9 @@ func InitialDB(){
 		log.Fatalf("Error while reading config file %s", err)
 	}
 
+	// PostgreSQL connected
 	// dsn := fmt.Sprintf(
 	// 	"host=%s user=%s password=%s dbname=%s port=%s sslmode=disable",
-	// 	os.Getenv("DB_HOST"),
-	// 	os.Getenv("DB_USER"),
-	// 	os.Getenv("DB_PASSWORD"),
-	// 	os.Getenv("DB_NAME"),
-	// 	os.Getenv("DB_PORT"),
-	// )
 
 	dsn := fmt.Sprintf(
 		"%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
@@ -45,4 +40,5 @@ func InitialDB(){
 	DB = database
 
 	DB.AutoMigrate(&food_list{})
+	DB.AutoMigrate((&User{}))
 }
