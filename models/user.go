@@ -9,10 +9,10 @@ import (
 )
 
 type User struct {
-	UserID   int8   `json:"id" gorm:"primary_key"`
+	UserID   int   `json:"id" gorm:"primary_key"`
 	Username string `json:"username" gorm:"unique"`
 	Password string `json:"password"`
-	Roles    int8   `json:"roles"`
+	Roles    int   `json:"roles"`
 }
 
 const (

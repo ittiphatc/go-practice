@@ -24,6 +24,7 @@ func main() {
 
 	router.Use(models_practice.AuthMiddleware())
 	{
+		router.GET("/usersession", models_practice.GetUser)
 		router.POST("/market/:MarkerID", models_practice.PostFood)
 		router.GET("/food/:id", models_practice.GetFoodByID)
 		router.GET("/market/:id", models_practice.GetFoodinMarket)
