@@ -1,8 +1,6 @@
 package models_practice
 
 import (
-	"fmt"
-
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
@@ -16,9 +14,9 @@ type User struct {
 }
 
 const (
-	CUSTOMER  = 1
+	CUSTOMER   = 1
 	RESTAURANT = 2
-	ADMIN     = 3
+	ADMIN      = 3
 )
 
 func HashPassword(password string) (string, error) {
@@ -26,15 +24,14 @@ func HashPassword(password string) (string, error) {
 	return string(bytes), err
 }
 
-
 func CheckPasswordHash(password, hash string) bool {
-    err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
-    return err == nil
+	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
+	return err == nil
 }
 
 func UserRegister(c *gin.Context) {
 	var user User
-	c.BindJSON(&user)	
+	c.BindJSON(&user)
 
 	user.Password, _ = HashPassword(user.Password)
 	DB.Create(&user)
@@ -51,8 +48,8 @@ func UserLogin(c *gin.Context) {
 	if user.Username == userDB.Username && CheckPasswordHash(user.Password, userDB.Password) {
 		token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 			"username": user.Username,
-			"ID": userDB.UserID,
-			"roles": userDB.Roles,
+			"ID":       userDB.UserID,
+			"roles":    userDB.Roles,
 		})
 		tokenString, err := token.SignedString([]byte("food_secret"))
 		if err != nil {
@@ -63,7 +60,6 @@ func UserLogin(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"token": tokenString,
 		})
-		fmt.Println(tokenString)
 	} else {
 		c.JSON(401, gin.H{
 			"message": "Unauthorized",
