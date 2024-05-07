@@ -2,8 +2,9 @@ package models_practice
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
+
 	"github.com/dgrijalva/jwt-go"
+	"github.com/gin-gonic/gin"
 )
 
 func AuthMiddleware() gin.HandlerFunc {
@@ -34,8 +35,8 @@ func AuthMiddleware() gin.HandlerFunc {
 
 		if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 			c.Set("username", claims["username"])
-			c.Set("ID", claims["ID"])
-			c.Set("roles", claims["roles"])
+			c.Set("ID", int(claims["ID"].(float64)))
+			c.Set("roles", int(claims["roles"].(float64)))
 			c.Next()
 		} else {
 			c.JSON(401, gin.H{
@@ -44,6 +45,7 @@ func AuthMiddleware() gin.HandlerFunc {
 			c.Abort()
 			return
 		}
+
 		if token.Claims.(jwt.MapClaims)["roles"] == CUSTOMER {
 			if c.Request.URL.Path == "/market/:MarketID" {
 				c.JSON(403, gin.H{
@@ -54,6 +56,7 @@ func AuthMiddleware() gin.HandlerFunc {
 			}
 			c.Next()
 		}
+
 		if token.Claims.(jwt.MapClaims)["roles"] == RESTAURANT {
 			id := c.Param("MarketID")
 			if id != token.Claims.(jwt.MapClaims)["ID"] {
@@ -66,4 +69,22 @@ func AuthMiddleware() gin.HandlerFunc {
 			c.Next()
 		}
 	}
+}
+
+func GetUser(c *gin.Context) {
+	var userInfo struct {
+		Username string `json:"username"`
+		ID       int    `json:"ID"`
+		Roles    int    `json:"roles"`
+	}
+
+	userInfo.Username = c.GetString("username")
+	userInfo.ID = c.GetInt("ID")
+	userInfo.Roles = c.GetInt("roles")
+
+	c.JSON(200, gin.H{
+		"username": userInfo.Username,
+		"ID":       userInfo.ID,
+		"roles":    userInfo.Roles,
+	})
 }
